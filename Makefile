@@ -4,7 +4,7 @@
 #
 
 CC = gcc
-CFLAGS = -std=c11 -pthread -Wall -Wextra -O2
+CFLAGS = -std=c11 -pthread -Wall -Wextra
 LDFLAGS = -lm
 INCLUDES = -I./include
 SRCDIR = src
@@ -17,9 +17,6 @@ SRCS = $(SRCDIR)/simulator.c $(SRCDIR)/paginacion.c $(SRCDIR)/segmentacion.c \
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 TARGET = $(BINDIR)/simulator
 
-# Configuración común para experimentos
-COMMON_FLAGS = --mode page --threads 1 --workload 80-20 --ops-per-thread 50000 \
-               --pages 128 --frames 64 --page-size 4096 --seed 200 --stats
 
 .PHONY: all clean run reproduce help
 
@@ -54,7 +51,10 @@ run: all
 
 # Reproduce: ejecuta el script experimento2.sh
 reproduce: all
+	@bash ./experimento1.sh
 	@bash ./experimento2.sh
+	@bash ./experimento3.sh
+
 # Ayuda
 help:
 	@echo ""
@@ -66,6 +66,6 @@ help:
 	@echo "  make all      - Compila el proyecto (default)"
 	@echo "  make clean    - Elimina archivos compilados"
 	@echo "  make run      - Ejecuta un ejemplo simple"
-	@echo "  make reproduce- Ejecuta experimento2.sh (comparación TLB)"
+	@echo "  make reproduce- Ejecuta 3 experimentos"
 	@echo "  make help     - Muestra esta ayuda"
 	@echo ""
