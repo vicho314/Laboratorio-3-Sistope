@@ -6,6 +6,7 @@
 #ifndef FRAME_ALLOCATOR_H
 #define FRAME_ALLOCATOR_H
 
+#include <pthread.h>
 #include "simulator.h"
 
 
