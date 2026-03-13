@@ -11,7 +11,7 @@ mkdir -p out
 
 # Configuracion comun 
 COMMON="--mode seg --threads 1 --workload uniform \
---ops-per-thread 50000 --segments 4 \
+--ops-per-thread 10000 --segments 4 \
 --seg-limits 1024,2048,4096,8192 --seed 100 --stats"
 
 #  Ejecucion 1

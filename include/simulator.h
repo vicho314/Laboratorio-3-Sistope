@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #define INVALID_FRAME 0xFFFFFFFFFFFFFFFFULL
+#define MAX_SEGMENTS 16
 
 
 typedef struct {
@@ -18,7 +19,8 @@ typedef struct {
     int frames;                 // Número de frames físicos disponibles
     int threads;                // Número de threads
     int num_segments;           // Para segmentación: número de segmentos por thread
-    int segment_size;           // Para segmentación: tamaño en bytes de cada segmento
+    int segment_size;           // Para segmentación: tamaño en bytes de cada segmento (default)
+    uint32_t segment_limits[MAX_SEGMENTS];  // Límites específicos de cada segmento
     int mode;                   // 0 = paginacion, 1 = segmentacion
 } sim_config_t;
 

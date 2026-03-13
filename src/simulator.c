@@ -76,6 +76,11 @@ int main(int argc, char *argv[])
         .mode = -1  // Obligatorio especificar
     };
     
+    // Inicializar límites de segmentos con valor por defecto
+    for (int i = 0; i < MAX_SEGMENTS; i++) {
+        config.segment_limits[i] = 4096;
+    }
+    
     int ops_per_thread = 1000;
     int workload_type = 0;  // 0 = uniform, 1 = 80-20
     int seed = 42;
@@ -97,6 +102,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "\nFlags específicos de segmentación:\n");
         fprintf(stderr, "  --segments INT (default: 4)\n");
         fprintf(stderr, "  --seg-limits CSV (default: todos 4096)\n");
+        fprintf(stderr, "    Ejemplo: --seg-limits 4096,8192,4096,16384 (comma-separated)\n");
         fprintf(stderr, "\nFlags específicos de paginación:\n");
         fprintf(stderr, "  --pages INT (default: 64)\n");
         fprintf(stderr, "  --frames INT (default: 32)\n");
@@ -169,8 +175,20 @@ int main(int argc, char *argv[])
             case 'g':  // --segments
                 config.num_segments = atoi(optarg);
                 break;
-            case 'l':  // --seg-limits (se ignora por ahora, todos 4096)
-                // TODO: parsear lista CSV de límites
+            case 'l':  // --seg-limits (lista CSV de límites)
+                {
+                    int len = strlen(optarg);
+                    char *copy = malloc(len + 1);
+                    strcpy(copy, optarg);
+                    char *token = strtok(copy, ",");
+                    int idx = 0;
+                    while (token != NULL && idx < MAX_SEGMENTS) {
+                        config.segment_limits[idx] = atol(token);
+                        token = strtok(NULL, ",");
+                        idx++;
+                    }
+                    free(copy);
+                }
                 break;
             case 'p':  // --pages
                 config.num_pages = atoi(optarg);

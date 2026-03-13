@@ -140,8 +140,8 @@ segmentation_context_t *segmentation_context_create(sim_config_t *config, int th
 
     /* Define el numero de segmentos y reserva memoria limpia para las entradas de la tabla. 
     Si la asignacion falla, libera los recursos previos para evitar fugas de memoria. */
-    ctx->segment_table->num_segments = config->num_pages;
-    ctx->segment_table->entries = calloc(config->num_pages, sizeof(segment_table_entry_t));
+    ctx->segment_table->num_segments = config->num_segments;
+    ctx->segment_table->entries = calloc(config->num_segments, sizeof(segment_table_entry_t));
     if (!ctx->segment_table->entries) {
         fprintf(stderr, "Error: no se pudo asignar entradas de tabla de segmentos\n");
         free(ctx->segment_table);
@@ -150,9 +150,9 @@ segmentation_context_t *segmentation_context_create(sim_config_t *config, int th
     }
 
     // Inicializar todos los segmentos como invalidos
-    for (int i = 0; i < config->num_pages; i++) {
+    for (int i = 0; i < config->num_segments; i++) {
         ctx->segment_table->entries[i].base = 0;
-        ctx->segment_table->entries[i].limit = 0;
+        ctx->segment_table->entries[i].limit = config->segment_limits[i];
         ctx->segment_table->entries[i].valid = 0;
     }
 
