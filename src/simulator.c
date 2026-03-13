@@ -81,6 +81,8 @@ int main(int argc, char *argv[])
     int seed = 42;
     int unsafe_mode = 0;
     int print_stats = 0;
+    char tlb_policy[16] = "fifo";
+    char evict_policy[16] = "fifo";
     
     // Si no hay argumentos, imprimir uso
     if (argc < 2) {
@@ -100,6 +102,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "  --frames INT (default: 32)\n");
         fprintf(stderr, "  --page-size INT (default: 4096)\n");
         fprintf(stderr, "  --tlb-size INT (default: 16)\n");
+        fprintf(stderr, "  --tlb-policy {fifo} (default: fifo)\n");
+        fprintf(stderr, "  --evict-policy {fifo} (default: fifo)\n");
         return 1;
     }
     
@@ -119,6 +123,8 @@ int main(int argc, char *argv[])
         {"frames", required_argument, 0, 'f'},
         {"page-size", required_argument, 0, 'P'},
         {"tlb-size", required_argument, 0, 'T'},
+        {"tlb-policy", required_argument, 0, 'B'},
+        {"evict-policy", required_argument, 0, 'E'},
         {0, 0, 0, 0}
     };
     
@@ -177,6 +183,22 @@ int main(int argc, char *argv[])
                 break;
             case 'T':  // --tlb-size
                 config.tlb_size = atoi(optarg);
+                break;
+            case 'B':  // --tlb-policy
+                strncpy(tlb_policy, optarg, sizeof(tlb_policy) - 1);
+                tlb_policy[sizeof(tlb_policy) - 1] = '\0';
+                if (strcmp(tlb_policy, "fifo") != 0) {
+                    fprintf(stderr, "Error: tlb-policy solo soporta 'fifo'\n");
+                    return 1;
+                }
+                break;
+            case 'E':  // --evict-policy
+                strncpy(evict_policy, optarg, sizeof(evict_policy) - 1);
+                evict_policy[sizeof(evict_policy) - 1] = '\0';
+                if (strcmp(evict_policy, "fifo") != 0) {
+                    fprintf(stderr, "Error: evict-policy solo soporta 'fifo'\n");
+                    return 1;
+                }
                 break;
             default:
                 fprintf(stderr, "Opción desconocida\n");
