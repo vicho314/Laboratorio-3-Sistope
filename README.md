@@ -1,7 +1,7 @@
 # Laboratorio 3: Simulador Concurrente de Memoria Virtual
 
 Autores
-Vicente Carrasco (20782358)
+Vicente Carrasco (207823589)
 Maximiliano Ojeda (205532153)
 
 Simulador de memoria virtual que implementa los esquemas de segmentacion y paginacion de forma concurrente utilizando threads POSIX. Cada thread simula un proceso con su propio espacio de direcciones virtual, compitiendo por memoria fisica compartida.
